@@ -7,6 +7,7 @@ Create rails app
 Add gems to Gemfile
 
 ```
+gem "devise"
 gem "slim-rails"
 
 group :development do
@@ -17,3 +18,11 @@ group :development, :test do
   gem "pry"
 end
 ```
+
+Add `/config/database.yml` to `.gitignore`
+
+Initialize devise && add users
+
+`rails g devise:install`
+`rails g devise user`
+`rails g scaffold post title body user:references`
