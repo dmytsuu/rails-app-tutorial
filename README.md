@@ -15,13 +15,23 @@ gem "sidekiq"
 gem 'pg_search'
 gem 'friendly_id'
 gem 'discard'
+gem "interactor", "~> 3.0"
+
+group :development, :test do
+  gem 'brakeman'
+  gem 'bullet'
+  gem 'bundler-audit'
+  gem 'pry'
+end
 
 group :development do
   gem 'rubocop-rails', require: false
+  gem 'web-console'
 end
 
-group :development, :test do
-  gem "pry"
+group :test do
+  gem 'factory_bot_rails'
+  gem 'ffaker'
   gem 'rspec-rails', '~> 6.1.0'
 end
 ```
@@ -42,6 +52,7 @@ rails g devise user
 rails g scaffold post title content:rich_text slug:uniq user:references discarded_at:datetime:index
 rails g pundit:install
 rails g pundit:policy post
+rails g bullet:install
 ```
 
 Generate migration for pg plugin
@@ -75,6 +86,8 @@ Add to application_controller
 ```
   include Pundit::Authorization
   include Pagy::Backend
+
+  before_action :authenticate_user!
 ```
 
 Add to application_helper
@@ -91,9 +104,103 @@ Add to file
 
 ```
 require: rubocop-rails
+
+Documentation:
+  Enabled: false
+
+AllCops:
+  Exclude:
+   - 'db/**/*'
+   - 'bin/*'
+   - 'config/**/*'
 ```
 
 Run
 
 `rubocop -A`
 
+Add to `application.css` at the top
+
+```
+@import "https://unpkg.com/open-props";
+
+/* optional imports that use the props */
+@import "https://unpkg.com/open-props/normalize.min.css";
+@import "https://unpkg.com/open-props/buttons.min.css";
+```
+
+Update routs root
+
+```
+  root "posts#index"
+```
+
+Generate factories
+
+```
+rails generate factory_bot:model user email password
+rails g factory_bot:model psot title content:rich_text user:references
+```
+
+Remove generated specs and create one simple one, for example
+
+```
+  it { expect(true).to be_truthy }
+```
+
+Add `.github/workflows/rubyonrails.yml`
+
+```
+name: "Ruby on Rails CI"
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:11-alpine
+        ports:
+          - "5432:5432"
+        env:
+          POSTGRES_DB: easy_rails_app_test
+          POSTGRES_USER: rails
+          POSTGRES_PASSWORD: password
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: "postgres://rails:password@localhost:5432/easy_rails_app_test"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      # Add or replace dependency steps here
+      - name: Install Ruby and gems
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      # Add or replace database setup steps here
+      - name: Set up database schema
+        run: bin/rails db:prepare
+      # Add or replace test runners here
+      - name: Run tests
+        run: bundle exec rspec
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install Ruby and gems
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      # Add or replace any other lints here
+      - name: Security audit dependencies
+        run: bundle exec bundler-audit --update
+      - name: Security audit application code
+        run: bundle exec brakeman -q -w2
+      - name: Lint Ruby files
+        run: bundle exec rubocop --parallel
+```
