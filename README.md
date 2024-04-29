@@ -2,7 +2,7 @@
 
 Create rails app
 
-`rails new easy-rails-app -T -d postgresql`
+`rails new easy-rails-app -T -d postgresql -c tailwind`
 
 Add gems to Gemfile
 
