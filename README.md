@@ -27,6 +27,7 @@ end
 
 group :development do
   gem 'web-console'
+  gem 'letter_opener'
 end
 
 group :test do
@@ -43,6 +44,13 @@ Install gems
 `bundle`
 
 Add `/config/database.yml` to `.gitignore`
+
+Update `config/environments/development.rb`
+
+```
+  config.action_mailer.delivery_method = :letter_opener
+  config.action_mailer.perform_deliveries = true
+```
 
 Commands && scaffold
 
@@ -124,8 +132,6 @@ Add to `application.css` at the top
 
 ```
 @import "https://unpkg.com/open-props";
-
-/* optional imports that use the props */
 @import "https://unpkg.com/open-props/normalize.min.css";
 @import "https://unpkg.com/open-props/buttons.min.css";
 ```
