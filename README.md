@@ -26,8 +26,9 @@ group :development, :test do
 end
 
 group :development do
-  gem 'web-console'
+  gem 'kamal'
   gem 'letter_opener'
+  gem 'web-console'
 end
 
 group :test do
@@ -210,4 +211,72 @@ jobs:
         run: bundle exec brakeman -q -w2
       - name: Lint Ruby files
         run: bundle exec rubocop --parallel
+```
+
+Run `kamal init`
+
+Having a dockerhub account is required in this setup and two VPS machines too for main/secondary services and db(separately).
+
+Example of `.env`
+
+```
+KAMAL_REGISTRY_PASSWORD=dckr_pat_o-dfsd$asd-e-dsadad123
+RAILS_MASTER_KEY=644123asdf3423ab4a0a1790182312asd
+POSTGRES_DB=easy_rails_app_production
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=HxXXXM93Nunq9c
+DB_HOST=192.168.0.2
+APP_HOST=192.168.0.1
+REDIS_URL=redis://192.168.0.1:6379
+```
+
+Example of `config/deploy.yml`
+
+```
+service: your-app
+image: your-name/your-app
+servers:
+  web:
+    hosts:
+      - <%= ENV.fetch('APP_HOST') %>
+  sidekiq:
+    cmd: bundle exec sidekiq
+    hosts:
+      - <%= ENV.fetch('APP_HOST') %>
+registry:
+  username: your-name
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+env:
+  secret:
+    - RAILS_MASTER_KEY
+    - DB_HOST
+    - POSTGRES_DB
+    - POSTGRES_USER
+    - POSTGRES_PASSWORD
+    - REDIS_URL
+builder:
+  multiarch: false
+accessories:
+  db:
+    image: postgres:latest
+    host: <%= ENV.fetch('DB_HOST') %>
+    port: 5432
+    env:
+      clear:
+        POSTGRES_USER: "postgres"
+        POSTGRES_DB: "easy_rails_app_production"
+      secret:
+        - POSTGRES_PASSWORD
+    files:
+      # - config/mysql/production.cnf:/etc/mysql/my.cnf
+      - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
+    directories:
+      - data:/var/lib/postgresql/data
+  redis:
+    image: redis:7.0
+    host: <%= ENV.fetch('APP_HOST') %>
+    port: 6379
+    directories:
+      - redis-data:/data
 ```
