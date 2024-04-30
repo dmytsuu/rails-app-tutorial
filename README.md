@@ -18,6 +18,7 @@ gem 'pg_search'
 gem 'friendly_id'
 gem 'discard'
 gem "interactor", "~> 3.0"
+gem 'strada-rails'
 
 group :development, :test do
   gem 'brakeman'
@@ -102,6 +103,10 @@ rails g pundit:policy post
 
 ```
 rails g bullet:install
+```
+
+```
+rails strada:install
 ```
 
 Generate migration for pg plugin
@@ -332,4 +337,26 @@ CREATE DATABASE your_app_production;
 
 ```
 kamal deploy
+```
+
+### Mobile apps
+
+Install native app initializer
+
+```
+gem install turbo-native-initializer
+```
+
+Android(android studio is required)
+
+ATTENTION: This is going to create a new repository!
+```
+turbo-native-initializer EasyRailsApp --platform=android
+```
+
+Update `app/src/main/java/dev/hotwire/turbo/easyrailsapp/util/Constants.kt`
+
+```
+private const val DEVELOPMENT_URL = "http://localhost:3000"
+private const val PRODUCTION_URL  = "https://your-app.com"
 ```
