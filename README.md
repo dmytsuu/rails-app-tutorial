@@ -83,7 +83,7 @@ Add to post model
   include Discard::Model
   include PgSearch::Model
 
-  friendly_id :title, use: :slugged
+  friendly_id :title, use: %i[slugged finders]
 
   pg_search_scope :by_title,
                 against: :title,
