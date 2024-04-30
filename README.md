@@ -60,6 +60,10 @@ Update `config/environments/development.rb`
 Update `config/application.rb`
 
 ```
+  config.generators do |g|
+    g.template_engine :slim
+  end
+
   config.active_job.queue_adapter = :sidekiq
 ```
 
