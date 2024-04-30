@@ -183,15 +183,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      # Add or replace dependency steps here
       - name: Install Ruby and gems
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-      # Add or replace database setup steps here
       - name: Set up database schema
         run: bin/rails db:prepare
-      # Add or replace test runners here
       - name: Run tests
         run: bundle exec rspec
 
@@ -204,7 +201,6 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-      # Add or replace any other lints here
       - name: Security audit dependencies
         run: bundle exec bundler-audit --update
       - name: Security audit application code
