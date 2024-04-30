@@ -179,14 +179,6 @@ Run
 rubocop -A
 ```
 
-Add to `application.css` at the top
-
-```
-@import "https://unpkg.com/open-props";
-@import "https://unpkg.com/open-props/normalize.min.css";
-@import "https://unpkg.com/open-props/buttons.min.css";
-```
-
 Update routs root
 
 ```
