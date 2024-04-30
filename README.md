@@ -2,7 +2,9 @@
 
 Create rails app
 
-`rails new your-app -T -d postgresql -c tailwind`
+```
+rails new your-app -T -d postgresql -c tailwind
+```
 
 Add gems to Gemfile
 
@@ -38,11 +40,15 @@ group :test do
 end
 ```
 
-`rails action_text:install`
+```
+rails action_text:install
+```
 
 Install gems
 
-`bundle`
+```
+bundle
+```
 
 Update `config/environments/development.rb`
 
@@ -72,24 +78,45 @@ Commands && scaffold
 
 ```
 rails g devise:install
+```
+
+```
 rails g devise user
+```
+
+```
 rails g scaffold post title content:rich_text slug:uniq user:references discarded_at:datetime:index
+```
+
+```
 rails g pundit:install
+```
+
+```
 rails g pundit:policy post
+```
+
+```
 rails g bullet:install
 ```
 
 Generate migration for pg plugin
 
-`rails g migration enable_pg_trgm`
+```
+rails g migration enable_pg_trgm
+```
 
 Update #change with
 
-`enable_extension 'pg_trgm'`
+```
+enable_extension 'pg_trgm'
+```
 
 Prepare database
 
-`rails db:prepare`
+```
+rails db:prepare
+```
 
 Add to post model
 
@@ -122,7 +149,9 @@ Add to application_helper
 
 Rubocop
 
-`rubocop --init`
+```
+rubocop --init
+```
 
 Add to file 
 
@@ -142,7 +171,9 @@ AllCops:
 
 Run
 
-`rubocop -A`
+```
+rubocop -A
+```
 
 Add to `application.css` at the top
 
@@ -224,7 +255,11 @@ jobs:
         run: bundle exec rubocop --parallel
 ```
 
-Run `kamal init`
+Run
+
+```
+kamal init
+```
 
 Having a dockerhub account is required in this setup and two VPS machines too for main/secondary services and db(separately).
 
