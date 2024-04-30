@@ -276,7 +276,7 @@ accessories:
     env:
       clear:
         POSTGRES_USER: "postgres"
-        POSTGRES_DB: "easy_rails_app_production"
+        POSTGRES_DB: "your_app_production"
       secret:
         - POSTGRES_PASSWORD
     files:
