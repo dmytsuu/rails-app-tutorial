@@ -44,13 +44,28 @@ Install gems
 
 `bundle`
 
-Add `/config/database.yml` to `.gitignore`
-
 Update `config/environments/development.rb`
 
 ```
   config.action_mailer.delivery_method = :letter_opener
   config.action_mailer.perform_deliveries = true
+```
+
+Update `config/application.rb`
+
+```
+  config.active_job.queue_adapter = :sidekiq
+```
+
+Update `config/database.yml`
+
+```
+production:
+  <<: *default
+  host: <%= ENV["DB_HOST"] %>
+  database: <%= ENV["POSTGRES_DB"] %>
+  username: <%= ENV["POSTGRES_USER"] %>
+  password: <%= ENV["POSTGRES_PASSWORD"] %>
 ```
 
 Commands && scaffold
