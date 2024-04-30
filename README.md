@@ -262,6 +262,7 @@ kamal init
 ```
 
 Having a dockerhub account is required in this setup and two VPS machines too for main/secondary services and db(separately).
+You also need to have SSH access via pub/private keys to VPS you deploy
 
 Example of `.env`
 
@@ -331,4 +332,8 @@ Example of `db/production.sql`
 
 ```
 CREATE DATABASE your_app_production;
+```
+
+```
+kamal deploy
 ```
