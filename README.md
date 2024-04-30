@@ -291,3 +291,9 @@ accessories:
     directories:
       - redis-data:/data
 ```
+
+Example of `db/production.sql`
+
+```
+CREATE DATABASE your_app_production;
+```
